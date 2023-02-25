@@ -1,4 +1,5 @@
 import { Response, Request } from 'express';
+
 import { JokesFileRepo } from '../repository/jokes.file.repo.js';
 
 export class JokesController {
@@ -12,11 +13,15 @@ export class JokesController {
   }
 
   getById(req: Request, resp: Response) {
-    const jokeId = Number(req.params.id);
-    this.repo.read().then((data) => {
-      const found = data.find((item) => item.id === Number(jokeId));
-      resp.json(found);
-    });
+    const jokeNum = Number(req.params.id);
+
+    this.repo
+      .readById(jokeNum)
+      .then((data) =>
+        data === undefined
+          ? resp.status(404).send(`<p>Error, joke num ${jokeNum} not found</p>`)
+          : resp.status(200).json(data)
+      );
   }
 
   async write(req: Request, resp: Response) {
