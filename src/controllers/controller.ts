@@ -11,11 +11,19 @@ export class JokesController {
     });
   }
 
-  get(req: Request, resp: Response) {
-    resp.send('This is thing ' + req.params.id);
+  getById(req: Request, resp: Response) {
+    const jokeId = Number(req.params.id);
+    this.repo.read().then((data) => {
+      const found = data.find((item) => item.id === Number(jokeId));
+      resp.json(found);
+    });
   }
 
-  post(_req: Request, _resp: Response) {}
+  async write(req: Request, resp: Response) {
+    const newJoke = req.body;
+    await this.repo.write(newJoke);
+    resp.sendStatus(200);
+  }
 
   patch(_req: Request, _resp: Response) {}
 
