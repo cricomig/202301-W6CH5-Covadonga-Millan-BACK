@@ -4,7 +4,7 @@ import { Joke } from '../models/jokes';
 const file = './data/jokes.json';
 
 export class JokesFileRepo {
-  read(): Promise<Joke[]> {
+  read(_id: Joke['id']): Promise<Joke[]> {
     return fs
       .readFile(file, { encoding: 'utf-8' })
       .then((data) => JSON.parse(data));
@@ -33,5 +33,20 @@ export class JokesFileRepo {
   }
 
   update() {}
-  delete() {}
+
+  async delete(id: Joke['id']) {
+    const initialData = await fs.readFile(file, {
+      encoding: 'utf-8',
+    });
+
+    const data: Joke[] = JSON.parse(initialData);
+
+    const dataFilter = data.filter((item) => item.id !== id);
+
+    const newData = JSON.stringify(dataFilter);
+
+    await fs.writeFile(file, newData, {
+      encoding: 'utf-8',
+    });
+  }
 }

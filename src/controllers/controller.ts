@@ -32,5 +32,10 @@ export class JokesController {
 
   patch(_req: Request, _resp: Response) {}
 
-  delete(_req: Request, _resp: Response) {}
+  async delete(req: Request, resp: Response) {
+    const jokeNum = Number(req.params.id);
+    const data = await this.repo.read(jokeNum);
+    if (!data) return resp.send(`<p>Error, joke num ${jokeNum} not found</p>`);
+    await this.repo.delete(jokeNum);
+  }
 }
