@@ -27,15 +27,16 @@ export class JokesController {
   async write(req: Request, resp: Response) {
     const newJoke = req.body;
     await this.repo.write(newJoke);
-    resp.sendStatus(200);
+    resp.send(`A new joke has been added successfully`);
   }
 
   patch(_req: Request, _resp: Response) {}
 
   async delete(req: Request, resp: Response) {
     const jokeNum = Number(req.params.id);
-    const data = await this.repo.read(jokeNum);
+    const data = await this.repo.readById(jokeNum);
     if (!data) return resp.send(`<p>Error, joke num ${jokeNum} not found</p>`);
     await this.repo.delete(jokeNum);
+    resp.send(`<p>Joke num ${jokeNum} has been deleted</p`);
   }
 }
