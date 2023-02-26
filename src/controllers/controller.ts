@@ -30,7 +30,16 @@ export class JokesController {
     resp.send(`A new joke has been added successfully`);
   }
 
-  patch(_req: Request, _resp: Response) {}
+  patch(req: Request, resp: Response) {
+    const jokeNum = Number(req.params.id);
+    this.repo
+      .update(jokeNum, req.body)
+      .then((data) =>
+        data === undefined
+          ? resp.status(404).send(`<p>Error, joke num ${jokeNum} not found</p>`)
+          : resp.json(data)
+      );
+  }
 
   async delete(req: Request, resp: Response) {
     const jokeNum = Number(req.params.id);

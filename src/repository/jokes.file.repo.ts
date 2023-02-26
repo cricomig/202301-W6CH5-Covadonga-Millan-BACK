@@ -32,7 +32,19 @@ export class JokesFileRepo {
     });
   }
 
-  update() {}
+  async update(id: number, newData: any) {
+    const data = await fs.readFile(file, 'utf-8');
+    const parseJSON = JSON.parse(data);
+    const updatedData = parseJSON.map((item: { id: number }) => {
+      if (item.id === id) {
+        return { ...item, ...newData };
+      }
+
+      return item;
+    });
+    const finalFile = JSON.stringify(updatedData);
+    await fs.writeFile(file, finalFile, 'utf-8');
+  }
 
   async delete(id: Joke['id']) {
     const initialData = await fs.readFile(file, {

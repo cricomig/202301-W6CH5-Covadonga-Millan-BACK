@@ -10,5 +10,5 @@ const controller = new JokesController(repo);
 jokesRouter.get('/', controller.getAll.bind(controller));
 jokesRouter.get('/:id', controller.getById.bind(controller));
 jokesRouter.post('/', controller.write.bind(controller));
-jokesRouter.patch('/', controller.patch.bind(controller));
+jokesRouter.patch('/:id', controller.patch.bind(controller));
 jokesRouter.delete('/:id', controller.delete.bind(controller));
